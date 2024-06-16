@@ -4,7 +4,7 @@ pipeline {
 		stage("clonig git repo"){
 			steps{
 			    sh 'echo ***************Cloning Git Repo********'
-                git url:'https://github.com/Chaitanya305/Energy_website.git', branch: 'master'
+                git url:'https://github.com/Chaitanya305/Devops_projects.git', branch: 'connect_to_k8s_from_jenkins'
 			}
 		}
 		stage("deploying to k8s"){
