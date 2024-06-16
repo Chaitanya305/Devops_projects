@@ -1,0 +1,128 @@
+Install Grafana
+
+#sudo apt-get install -y apt-transport-https software-properties-common wget
+#sudo mkdir -p /etc/apt/keyrings/
+wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+#echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+#sudo apt-get update
+#sudo apt-get install grafana
+
+Once Grafana is install always start the service and enable it 
+systemctl start graphana-server.
+
+
+install garafana from docker 
+
+docker run -d --name=grafana -p 3000:3000 grafana/grafana
+--------------------------------------------------
+Install Loki 
+
+1- get config file
+
+https://raw.githubusercontent.com/grafana/loki/v2.8.0/cmd/loki/loki-local-config.yaml -O loki-config.yml
+
+Run docker container of loki
+
+docker run -d --name loki -v $(pwd):/mnt/config -p 3100:3100 grafana/loki:2.8.0 --config.file=/mnt/config/loki-config.yml
+
+another way for loki
+
+docker run -d --name loki -v $(pwd)/loki-config.yml:/etc/loki/local-config.yaml -p 3100:3100 grafana/loki:2.9.3
+-----------------------------------------------------------------------------------------------------------------
+Install promtail 
+
+get config file 
+
+wget https://raw.githubusercontent.com/grafana/loki/v2.9.3/clients/cmd/promtail/promtail-docker-config.yaml -O promtail-config.yaml
+
+docker run -d --name promtail -v $(pwd):/mnt/config -v /var/log:/var/log --link loki grafana/promtail:2.9.3 --config.file=/mnt/config/promtail-config.yaml
+
+-------------------------------------------------------------
+
+Now here you have used container of promtail so it will give path from containers only if you want to use another path like docker path 
+
+docker run -d --name promtail -v $(pwd):/mnt/config -v /var/log:/var/log -v /var/lib:var/lib --link loki grafana/promtail:2.9.3 --config.file=/mnt/config/promtail-config.yaml
+
+this way you /var/lib logs will alo get attach to docker container. then it can provide it to the loki
+
+____________________________
+
+For miltiple instances Set-up
+
+install grafana loki promtail on one Main server 
+
+Then install promtail on all servers 
+In promtail.conf file of all other server provide the public ip of server where loki is installed
+
+Now all you promtails for all other server can send data to your loki 
+
+and in Main server only loki and grafana is configures so through local onlt they can be connected 
+
+if grafana on othet server also fine just provide loki url in grafana for datasource.
+---------------------------------------------------------------------
+
+installlation of Prometheous 
+
+First get the config file
+
+Wget https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
+
+docker run -d --name=prometheus -p 9090:9090 --network host -v ./prometheus.yml:/etc/prometheus/prometheus.yml -v prometheus-data:/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+
+----------------------
+Node Exporter
+its is some one who will scrap the metrics of linux system 
+
+To intall node exporter:
+
+docker run -d --name node_exporter --net="host" --pid="host" -v "/:/host:ro,rslave" quay.io/prometheus/node-exporter:latest --path.rootfs=/host
+	
+Now it will create network called host so keep all conainer in same network so that they can connect.  - for that i again launch prometheous with --network host
+---------------------------------------
+
+Now once Node Exporter is installed to bring the host system metrics to prometheous, we need to confogure prometheous.yml
+
+ - job_name: "node_exportet"
+   static_configs: 
+        - targets: ["localhost:9100"]
+
+
+Now i want to get remote server metrics 
+
+Then run Node exporter container inside remore server and then in our server where prometheous is installed changed config there 
+
+- job_name: "ec2_instance"                                                                                                                                                    
+  static_configs: 
+       - targets: ["54.161.16.229:9100"]
+
+Provide public ip of instnce so that over inernet Prometheous can connect
+
+--------------------------------------------------------------------------------------------
+CAdvisor Exporter:
+
+docker run --volume=/:/rootfs:ro --volume=/var/run:/var/run:ro --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --volume=/dev/disk/:/dev/disk:ro --publish=8080:8080 --detach=true --name=cadvisor --privileged --device=/dev/kmsg gcr.io/cadvisor/cadvisor:v0.36.0
+
+I have created this container again in same network so it can acces it by prometheous : --network host option i used in above docker command
+
+updared prometheous.yml 
+
+- job_name: "docker_metrics" 
+  static_configs:
+      - targets: ["localhost:8080"] 
+------------------------------------------------------------
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm repo update
+
+helm install prometheus bitnami/kube-prometheus
+
+tyxdqehdaoxurjqx
+
+18283
+
+1860
+
+100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)   -- cpu utilisation
+
+

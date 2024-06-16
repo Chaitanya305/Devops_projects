@@ -1,0 +1,65 @@
+1] install docker 
+2] build docker image
+3] install aws cli 
+4] create ecr 
+5] push image to ecr
+
+
+
+🚀 Just completed a hands-on AWS ECS project where I have deployed a django application on ECS with help of AWS ECR. 🛠️
+
+
+
+🛠️ Workflows :
+
+
+
+1. Created EC2 instance for cloning code from GitHub and building Docker image.
+
+
+
+2.  Downloaded Docker on EC2 Instance created DockerFile, and build image from it, Downloaded AWS CLI so that we can push image on ECR from EC2.
+
+
+
+3. Created Repository on AWS ECR to upload Docker image.
+
+
+
+4. Created IAM Role for EC2 Service to call ECR service on your behalf, So that we can push Docker image on ECR repo.
+
+
+
+5. Created ECS Cluster of infrastructure AWS Fargate. 
+
+
+
+6. Created task definition, provided container name with URL of image stored in ECR, Provided container port number.
+
+Then ran task on ECS Cluster.
+
+
+
+💡 Key Takeaways:
+
+
+
+1. Amazon Elastic Container Service (ECS) is a fully managed container orchestration service that helps you to more efficiently deploy, manage, and scale containerized applications.
+
+
+
+2. Launch containers on AWS at scale without worrying about the underlying infrastructure.
+
+Deploy faster and focus on your applications by using Amazon ECS with AWS Fargate serverless compute for containers.
+
+
+
+3. Push container images to Amazon ECR without installing or scaling infrastructure, and pull images using any management tool.
+
+
+
+Happy to share my learnings with the community! 🌟
+
+
+
+#devops #devopscommunity #cloud #devopsjobs #kubernetes #90daysofdevopschallenge #aws #EC2 #docker #trainwithshubham #cloudengineer #awscommunity#ECS#ECR

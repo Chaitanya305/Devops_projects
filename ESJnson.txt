@@ -1,0 +1,107 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:609316111350:task-definition/fals-app-td:4",
+    "containerDefinitions": [
+        {
+            "name": "flask-container",
+            "image": "609316111350.dkr.ecr.us-east-1.amazonaws.com/flask-app:latest",
+            "cpu": 512,
+            "memory": 1024,
+            "portMappings": [
+                {
+                    "name": "flask-container-5000-tcp",
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "pass123"
+                },
+                {
+                    "name": "MYSQL_DB",
+                    "value": "testdb"
+                },
+                {
+                    "name": "MYSQL_HOST",
+                    "value": "mysql-container"
+                },
+                {
+                    "name": "MYSQL_USER",
+                    "value": "root"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": []
+        },
+        {
+            "name": "mysql-container",
+            "image": "mysql",
+            "cpu": 512,
+            "memory": 1024,
+            "portMappings": [],
+            "essential": false,
+            "environment": [
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "pass123"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": []
+        }
+    ],
+    "family": "fals-app-td",
+    "taskRoleArn": "arn:aws:iam::609316111350:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::609316111350:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 4,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "ecs.capability.extensible-ephemeral-storage"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048",
+    "ephemeralStorage": {
+        "sizeInGiB": 21
+    },
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-01-11T21:40:07.268Z",
+    "registeredBy": "arn:aws:iam::609316111350:root",
+    "tags": []
+}

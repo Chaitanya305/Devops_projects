@@ -1,0 +1,47 @@
+1] install EKS and aws cli and kubectl in you baston host
+
+2]eksctl create cluster --name demo-cluster --region us-east-1 --fargate
+to create cluster with farget as node
+
+3] aws eks update-kubeconfig --region "us-east-1" --name "demo-cluster" 
+to provide kubectl on which cluster it should connect
+
+4] Create farget profile -- ? why we need it
+
+eksctl create fargateprofile \
+    --cluster demo-cluster \
+    --region us-east-1 \
+    --name alb-sample-app \
+    --namespace game-2048
+
+5] deploy service,deployment and ingress resource in namespace
+
+6] Now to install Ingress controller
+
+-- 1] Configure IAM OIDS provider 
+    2] Create IAM Policy -- 1] first get file jason file and then create policy form it
+    3] now attach role to service account as well attach policy to role
+    4] Through helm chart download pod for alb controller   get installed it in kube-system name space
+ 
+  
+
+eksctl create iamserviceaccount \
+  --cluster=demo-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::609316111350:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+
+
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=demo-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-east-1 \
+  --set vpcId=vpc-07dd1be084ca2a2ce
+
+
+

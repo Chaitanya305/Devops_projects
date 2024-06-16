@@ -1,0 +1,15 @@
+1] first install terraform from documentation for linux
+2] first always init terraform then plan and apply
+
+
+to create anything in terraform we wite resource block 
+
+resource block uses providers like local provider(bydefault present) aws provider, docker provider
+to have this provider or to donwload this providers you need to create terraform block there you will provide providers name which need to be installed.
+
+Now once provider is installed from terraform block, if  you need to configure the providers
+then to configure providers you need to use provider block
+
+3] to create infra in aws account configure aws account first.  - for this installed aws cli  
+
+4]  

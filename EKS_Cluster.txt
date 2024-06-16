@@ -1,0 +1,49 @@
+EKS
+
+"kubernetes.io/cluster/${var.eks_cluster_name}" this is tag defines wehere you lb get deployed when you create LB service
+it is at Subnet level, it has two value shared or owned
+
+alb.ingress.kubernetes.io/target-type: ip 	this annotation is to send traffic form alb to ip of pods direclty
+this tag at service level or ingress level .
+---------------------------------------------------------------
+alb controller will create new alb for each ingress resource with alb as ingres class 
+
+But with IngressGroup feature we can group multiple ingress resource together and use single LB 
+
+alb.ingress.kubernetes.io/group.name: <group name>
+
+ingress resource with above annotation will share same alb 
+-------------------------------------------------------------
+IAM OIDC Provider ?
+
+----------------------------
+
+aws eks update-kubeconfig --region us-east-1 --name eks-demo-cluster      to update kubeconfig for your cluster
+
+
+npm node 18 
+
+npm install 
+
+npm start 
+
+3000
+
+
+
+AD 
+USER PASSWORD 
+
+airflow for test 
+dash test there
+ 
+
+-------------------------
+
+1- create two containers in jupyter Notebook hub pod 
+2- automate helm creation in terraform 
+3- automate ebs csi driver for jupyterhub pod
+4- check jupyter notebook helm chart and see for user creation 
+5- check for ebs volume getting created or what?
+6- getting secrets from aws sercets into k8s manifests.
+7- start working on ingress also

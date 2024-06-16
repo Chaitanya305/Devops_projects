@@ -1,0 +1,13 @@
+1] Install eksctl kubectl awscli 
+
+2] Create EKS Cluster with EC2
+
+3] Then done IAM OIDC cinfiguration 
+
+4] Then setup alb controller
+
+5] Deployed CSI Drives controller -- it will create EBC for redias autonatically 
+
+6] Deploye all pods and services through helm 
+
+7] Then create ingress resource 
