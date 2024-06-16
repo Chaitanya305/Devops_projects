@@ -1,0 +1,11 @@
+Firs install k8s plugins in jenkins
+
+then create credentials by setting secret file. 
+secret file.txt  --> this will be the file containing content of ~./kube/config file
+
+then by using this file we can connect to k8s cluster from jenkins server. k8s plugins
+
+We have to put our jenkins file present at git-repository.  for SCM
+it will clone the repo in wrokspace/pipeline_name  --- it will directl fetch all file into this dir, unlike clone 
+
+in clone case we will get dir of repo name in wrokspace/pipeline_name
