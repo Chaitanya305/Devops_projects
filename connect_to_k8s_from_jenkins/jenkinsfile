@@ -10,7 +10,7 @@ pipeline {
 		stage("deploying to k8s"){
 			steps{
 			    sh 'echo ****Deploying to K8S CLuster******'
-			    dir('Energy_website/k8s') {
+			    dir('k8s') {
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s-cred', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
                         sh 'kubectl apply -f deployment.yml'
                         sh 'kubectl apply -f service.yml'
