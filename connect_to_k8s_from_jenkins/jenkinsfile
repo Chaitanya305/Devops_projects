@@ -23,8 +23,14 @@ pipeline {
 		failure {
 			mail bcc: '', body: '''Hi Team,
 
-		Please check below job has git failed.
-		$PROJECT_NAME''', cc: '', from: '', replyTo: '', subject: 'Job Got failed $BUILD_NUMBER', to: 'chaitanyagolhar35@gmail.com'
+		Please check below job has got failed.
+		$PROJECT_NAME''', cc: '', from: '', replyTo: '', subject: 'Job Got failed for the build $BUILD_NUMBER', to: 'chaitanyagolhar35@gmail.com'
+		}
+		success{
+			mail bcc: '', body: '''Hi Team,
+
+		Below job has been succeed.
+		$PROJECT_NAME''', cc: '', from: '', replyTo: '', subject: 'Job Got succeed for the build $BUILD_NUMBER', to: 'chaitanyagolhar35@gmail.com'
 		}
 	}
 }
