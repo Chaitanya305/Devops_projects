@@ -1,0 +1,12 @@
+Go to system --> at end go to E-mail Notification --
+SMTP server:  smtp.gmail.com
+Default user e-mail suffix: @gmail.com     (if this field is set to @acme.org, then user foo will by default get the e-mail address foo@acme.org)
+Click on Advanced-->
+user_name: chaitanyagolhar35@gmail.com
+Password : provide token generated form gmail
+Select SSL
+SMTP Port :- 465
+Reply-To Address:- chaitanyagolhar35@gmail.com    :- when he will click on reply which mail should get reply.
+Test e-mail recipient:- chaitanyagolhar0305@gmail.com  :- one to whome mail will be sent 
+
+
