@@ -19,4 +19,12 @@ pipeline {
 			}
 		}
 	}
+	post{
+		failure {
+			mail bcc: '', body: '''Hi Team,
+
+		Please check below job has git failed.
+		$PROJECT_NAME''', cc: '', from: '', replyTo: '', subject: 'Job Got failed $BUILD_NUMBER', to: 'chaitanyagolhar35@gmail.com'
+		}
+	}
 }

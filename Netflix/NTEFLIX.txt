@@ -1,0 +1,27 @@
+1] Craete jenkins server
+2] build docker image for netfluix clone
+3] push images
+4] deploy it over k8s 
+5] deploy minitoring manifest over k8s 
+6]email notfication once it is deployed.
+
+
+2c4c08d3ec0d7575153eca0348abd8b6     api key 
+
+
+eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYzRjMDhkM2VjMGQ3NTc1MTUzZWNhMDM0OGFiZDhiNiIsInN1YiI6IjY1ZDcwYjk1ZmZkNDRkMDE2MzJiNGUzOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MmO-BYnzXftnHPBdF-mvAYwy2pZm2op0F5pXLyUM1dA
+
+acces token
+
+
+docker build --build-arg TMDB_V3_API_KEY=<your-api-key> -t netflix .
+
+
+
+TO install kubestate-metrics
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install kube-state-metrics prometheus-community/kube-state-metrics --set service.type=NodePort
