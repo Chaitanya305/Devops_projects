@@ -1,0 +1,30 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:      
+  initContainers:
+    - name: sa-created
+      image: bitnami/kubectl:latest
+      command:
+        - sh
+        - -c
+        - |
+          while true; do
+            if kubectl get sa -n default | grep -i demo-sa;then
+              echo "service account is created"
+              break
+            else
+              echo "waiting for service account to be created"
+              sleep 2
+            fi 
+          done     
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-port
+  serviceAccountName: demo-sa
