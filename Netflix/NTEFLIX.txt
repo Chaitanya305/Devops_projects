@@ -1,10 +1,15 @@
-1] Craete jenkins server
-2] build docker image for netfluix clone
-3] push images
-4] deploy it over k8s 
-5] deploy minitoring manifest over k8s 
-6]email notfication once it is deployed.
+1] Craete jenkins server-- done deployed in kubernetes
+stages jenkins will be:
 
+	1] fetch the code from gtihub
+	2] build docker image for netflix clone 
+	3] push images 	
+	4] deploy it over k8s 
+	5] deploy minitoring manifest over k8s 
+	6]email notfication once it is deployed.
+
+
+2] in grafana configure alerting 
 
 2c4c08d3ec0d7575153eca0348abd8b6     api key 
 
@@ -25,3 +30,21 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 
 helm install kube-state-metrics prometheus-community/kube-state-metrics --set service.type=NodePort
+
+----------------------------------------
+To monitor K8S Cluster:
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm install prometheus prometheus-community/prometheus
+
+---------
+
+base64 -d encoded.txt > prometheus.yaml.gz
+
+gunzip prometheus.yaml.gz
+
+--------to encode again------
+gzip prometheus.yaml
+
+base64 prometheus.yaml.gz > encoded.txt
