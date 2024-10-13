@@ -61,8 +61,16 @@ TO acces remote server kubernetes Cluster.
 
 kubectl config set-cluster kubernetes --server=https://192.168.210.145:6443 --certificate-authority=/c/Users/Shree/ca.crt
 
-kubectl config set-credentials sagar --client-certificate=/c/Users/Shree/sagar.crt --client-key=/c/Users/Shree/sagar.key
+kubectl config set-credentials sagar --client-certificate=/c/Users/Shree/sagar.crt --client-key=/c/Users/Shree/sagar.key --embed-certs=true
 
 kubectl config set-context sagar --cluster=kubernetes --user=sagar
 
 kubectl config use-context sagar 
+
+
+-------------------
+
+*NOTE: - 
+When you create a user in Kubernetes using a certificate signing request (CSR) and then approve and use that certificate, 
+the user by default does not have any permissions. Kubernetes employs Role-Based Access Control (RBAC) to manage permissions, 
+and new users must be explicitly granted permissions through RoleBindings or ClusterRoleBindings.

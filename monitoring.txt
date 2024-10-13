@@ -110,6 +110,7 @@ updared prometheous.yml
   static_configs:
       - targets: ["localhost:8080"] 
 ------------------------------------------------------------
+TO MOnitor k8s-cluster
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
@@ -117,12 +118,10 @@ helm repo update
 
 helm install prometheus bitnami/kube-prometheus
 
-tyxdqehdaoxurjqx
+Gmail-token:- tyxdqehdaoxurjqx
 
 18283
 
 1860
 
 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)   -- cpu utilisation
-
-

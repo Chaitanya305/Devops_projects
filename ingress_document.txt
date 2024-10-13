@@ -104,3 +104,134 @@ Events:
   ----    ------  ----               ----                      -------
   Normal  Sync    18m (x3 over 26m)  nginx-ingress-controller  Scheduled for sync
 controlplane $ 
+
+
+------------
+
+we can also use ClusterIP service, chnage service type of nginx-controller to ClusterIP, and also all other pods services too ClusterIP , then dont use nodeip for addinf in /etc/host
+use clusterIP and add that one 
+cluserIP of ingress-controller service add that one it /etc/host file.
+
+
+
+---------------------------------------
+
+new config file to test:-  
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good-morning
+  labels:
+    app: good-morning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: good-morning
+  template:
+    metadata:
+      labels:
+        app: good-morning
+    spec:
+      containers:
+      - name: good-morning
+        image: chaitanya305/good-morning
+        ports:
+        - containerPort: 80
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: good-morning-svc
+spec:
+  selector:
+    app: good-morning
+  ports:
+    - port: 80
+      targetPort: 80
+
+
+
+------------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good-night
+  labels:
+    app: good-night
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: good-night
+  template:
+    metadata:
+      labels:
+        app: good-night
+    spec:
+      containers:
+      - name: good-night
+        image: chaitanya305/good-night
+        ports:
+        - containerPort: 80
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: good-night-svc
+spec:
+  selector:
+    app: good-night
+  ports:
+    - port: 81
+      targetPort: 80
+
+
+
+
+--------------------------
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  #namespace: dataflow-studio
+  annotations:
+   kubernetes.io/ingress.class: "nginx"
+
+spec:
+  ingressClassName: nginx
+  rules:
+   - host: demo.com
+     http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: good-morning-svc
+            port:
+              number: 80
+      - path: /good-night
+       pathType: Prefix
+        backend:
+          service:
+            name: good-night-svc
+            port:
+              number: 81
+      - path: /good-morning
+        pathType: Prefix
+        backend:
+          service:
+            name: good-morning-svc
+            port:
+              number: 80

@@ -9,37 +9,81 @@ stages jenkins will be:
 	6]email notfication once it is deployed.
 
 
-2] in grafana configure alerting 
+2] Set Alerts in grafana for high CPU and Memory utilisation of pods 
+Mount grafana.ini file with editing below details to grafana deployment
+enabled = true
+host = smtp.gmail.com:587
+user = chaitanyagolhar35@gmail.com
+# If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+password = """tyxdqehdaoxurjqx"""
 
-2c4c08d3ec0d7575153eca0348abd8b6     api key 
+TO test mail
+Then go to alerting in grafana --> Contact Point -->  add contact point --> provide mail id and test it.
 
+To get alerts:
+alerts rule --> New alert rule -->  alert name --> Query to check perticular metrics like cpu(100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100))--> then set threshould keep input as A --> above 80 
+Custome recover (stop sending alert once cindition match) --> below 80 --> Evaluation behaviour --> create folder or select if allready created --> evaluation group --> add group --> set time 1min i.e it will keep checking rules in this group for every 1m 
+--> Pending period --> time for which it will keep alert in pendimg state after that only it will fire the alerts -- > Configure labels and notifications --> provide label which is provided in notification policy if we have.
+
+Create Notofocation policy--> provide label to policy --> provide our contact point .
+
+At end of alert rule slect link dashbiard and panel --> select dashboard --> select panel
+
+TO get pods CPU usage
+sum by (pod) (
+  rate(container_cpu_usage_seconds_total{image!="", namespace="default"}[5m])
+)
+
+TO get Number of pods
+count(kube_pod_status_phase{phase="Running"})
+---------------------------- netflix-docker------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2c4c08d3ec0d7575153eca0348abd8b6   api key 
 
 eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYzRjMDhkM2VjMGQ3NTc1MTUzZWNhMDM0OGFiZDhiNiIsInN1YiI6IjY1ZDcwYjk1ZmZkNDRkMDE2MzJiNGUzOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MmO-BYnzXftnHPBdF-mvAYwy2pZm2op0F5pXLyUM1dA
 
 acces token
 
-
 docker build --build-arg TMDB_V3_API_KEY=<your-api-key> -t netflix .
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+***********for monitoring***********
+1] Add repo for prom and install kube-prometheus chart
+#helm repo add bitnami https://charts.bitnami.com/bitnami
+#helm repo update
+#helm install prometheus bitnami/kube-prometheus
+
+2] edit prom service to make it NodePort type
+#kubectl edit svc prometheus-kube-prometheus-prometheus
+
+3] Deploy pod for master node node-Exporter and grafana.
+
+4] Now add master node-exporter details to prom config for this:- 
+--1]  you need to get secret data from secret
+#kubectl edit secret prometheus-prometheus-kube-prometheus-prometheus
+get secret data and store it in encoded.txt 
+then to decode
+#base64 -d encoded.txt > prometheus.yaml.gz
+#gunzip prometheus.yaml.gz
+this way we will get prometheus.yml file, add the scrap config data for master node-exporter as below 
+- job_name: "node-exporter-worker"
+  static_configs:
+  	- targets: ["node-exporter-master-service:9101"]
 
 
+Now again we need to add this prometheus.yml file to pod 
+to encode file
+#gzip prometheus.yaml
+#base64 prometheus.yaml.gz > encoded.txt
+Now add the contain of encode.txt to secret 
+#kubectl edit secret prometheus-prometheus-kube-prometheus-prometheus
+then we will restart prometheus pod
+#kubectl delete pod prometheus-prometheus-kube-prometheus-prometheus-0
 
-TO install kubestate-metrics
+this didn't work need to check
 
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-helm repo update
-
-helm install kube-state-metrics prometheus-community/kube-state-metrics --set service.type=NodePort
-
-----------------------------------------
-To monitor K8S Cluster:
-
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-helm install prometheus prometheus-community/prometheus
-
----------
-
+5] Set Alerts in grafana for high CPU and Memory utilisation of pods 
+-----------------------------------------------------------------------------------------
+----------to decode--------
 base64 -d encoded.txt > prometheus.yaml.gz
 
 gunzip prometheus.yaml.gz
@@ -48,3 +92,4 @@ gunzip prometheus.yaml.gz
 gzip prometheus.yaml
 
 base64 prometheus.yaml.gz > encoded.txt
+---------------------------------------------------------------------------------
